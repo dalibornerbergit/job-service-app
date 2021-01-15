@@ -42,7 +42,7 @@
       <div>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on">
+            <v-btn @click="logout" icon v-bind="attrs" v-on="on">
               <v-icon>mdi-logout</v-icon>
             </v-btn>
           </template>
@@ -53,17 +53,9 @@
 
     <!-- Sidebar -->
     <v-navigation-drawer app v-model="drawer" class="blue-grey darken-4">
-      <v-row class="mt-5">
-        <v-col class="d-flex justify-center">
-          <v-avatar color="transparent" size="100">
-            <img src="/ante.jpg" alt="Image not found" />
-          </v-avatar>
-        </v-col>
-      </v-row>
-
       <v-row class="mb-4">
         <v-col class="text-center">
-          <span class="overline white--text">Some text</span>
+          <span class="overline white--text">job service</span>
         </v-col>
       </v-row>
 
@@ -86,14 +78,29 @@
 </template>
 
 <script>
+import Api from "../Api/Api";
+
 export default {
   data: () => ({
     drawer: false,
     links: [
-      { icon: "mdi-plus", text: "test", route: "/test" },
-      { icon: "mdi-plus", text: "test1", route: "/test1" },
-      { icon: "mdi-plus", text: "test2", route: "/test2" },
+      { icon: "mdi-account-circle", text: "Register", route: "/register" },
+      { icon: "mdi-account", text: "Login", route: "/login" },
+      { icon: "mdi-office-building", text: "Jobs", route: "/jobs" },
     ],
   }),
+  methods: {
+    logout() {
+      Api.post("/logout")
+        .then((response) => {
+          console.log(response);
+          localStorage.removeItem("api_token");
+          window.location.href = "/";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
 };
 </script>
