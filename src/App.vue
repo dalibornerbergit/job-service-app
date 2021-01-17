@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <Navbar />
     <v-main class="grey lighten-2">
       <router-view />

@@ -34,8 +34,9 @@
       </div>
 
       <span
+        v-if="user"
         class="blue-grey darken-4 white--text d-none d-sm-flex py-1 px-2 rounded"
-        >example@gmail.com</span
+        >{{ user.email }}</span
       >
 
       <!-- Logout -->
@@ -79,6 +80,7 @@
 
 <script>
 import Api from "../Api/Api";
+import { mapGetters } from "vuex";
 
 export default {
   data: () => ({
@@ -89,12 +91,16 @@ export default {
       { icon: "mdi-office-building", text: "Jobs", route: "/jobs" },
     ],
   }),
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
     logout() {
       Api.post("/logout")
         .then((response) => {
           console.log(response);
           localStorage.removeItem("api_token");
+          this.$store.dispatch("user", null);
           window.location.href = "/";
         })
         .catch((err) => {

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 import Jobs from '../views/Jobs'
 import Register from '../views/auth/Register'
 import Login from '../views/auth/Login'
@@ -14,17 +13,17 @@ const routes = [
     },
     {
         path: '/jobs',
-        name: 'jobs',
+        name: 'Jobs',
         component: Jobs
     },
     {
         path: '/register',
-        name: 'register',
+        name: 'Register',
         component: Register
     },
     {
         path: '/login',
-        name: 'login',
+        name: 'Login',
         component: Login
     }
 ]

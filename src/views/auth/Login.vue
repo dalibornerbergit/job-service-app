@@ -46,6 +46,7 @@ export default {
         .then((response) => {
           console.log(response);
           localStorage.setItem("api_token", response.data.data.api_token);
+          this.$store.dispatch("user", response.data.data);
           window.location.href = "/";
         })
         .catch((err) => {
