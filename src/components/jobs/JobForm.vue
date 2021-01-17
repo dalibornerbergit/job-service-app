@@ -32,11 +32,9 @@ export default {
     submitJob() {
       this.addJob(this.job)
         .then(() => {
-          console.log();
           this.$emit("jobCreated");
         })
         .catch(() => {
-          console.log("Fail");
           this.$emit("error");
         });
     },
