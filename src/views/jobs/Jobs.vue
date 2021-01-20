@@ -33,7 +33,7 @@
     </v-row>
 
     <v-dialog v-model="dialog" width="600">
-      <job-form
+      <add-job
         :job="job"
         @jobCreated="dialog = false"
         @closeDialog="dialog = false"
@@ -44,11 +44,11 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import JobForm from "../../components/jobs/JobForm.vue";
+import AddJob from "../../components/jobs/AddJob.vue";
 
 export default {
   components: {
-    JobForm,
+    AddJob,
   },
   data: () => ({
     job: {},

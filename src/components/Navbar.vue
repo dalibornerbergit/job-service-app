@@ -4,8 +4,8 @@
     <v-app-bar app flat>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase">
-        <span>ks</span>
-        <span class="font-weight-bold">interface</span>
+        <span>job</span>
+        <span class="font-weight-bold">service</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -27,6 +27,24 @@
               <v-list-item-title>
                 <v-icon left>{{ link.icon }}</v-icon>
                 {{ link.text }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/admin-panel">
+              <v-list-item-title>
+                <v-icon left>mdi-account-key</v-icon>
+                Admin panel
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="!user" to="/login">
+              <v-list-item-title>
+                <v-icon left>mdi-account</v-icon>
+                Login
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="!user" to="/register">
+              <v-list-item-title>
+                <v-icon left>mdi-account-circle</v-icon>
+                Register
               </v-list-item-title>
             </v-list-item>
           </v-list>
@@ -68,9 +86,27 @@
           link
           :to="link.route"
         >
-          <v-list-item-title class="white--text">
-            <v-icon color="white" left>{{ link.icon }}</v-icon>
+          <v-list-item-title>
+            <v-icon left>{{ link.icon }}</v-icon>
             {{ link.text }}
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/admin-panel">
+          <v-list-item-title>
+            <v-icon left>mdi-account-key</v-icon>
+            Admin panel
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="!user" to="/login">
+          <v-list-item-title>
+            <v-icon left>mdi-account</v-icon>
+            Login
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="!user" to="/register">
+          <v-list-item-title>
+            <v-icon left>mdi-account-circle</v-icon>
+            Register
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -85,11 +121,7 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({
     drawer: false,
-    links: [
-      { icon: "mdi-account-circle", text: "Register", route: "/register" },
-      { icon: "mdi-account", text: "Login", route: "/login" },
-      { icon: "mdi-office-building", text: "Jobs", route: "/jobs" },
-    ],
+    links: [{ icon: "mdi-office-building", text: "Jobs", route: "/jobs" }],
   }),
   computed: {
     ...mapGetters(["user"]),

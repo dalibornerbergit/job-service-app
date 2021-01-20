@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import AdminPanel from '../views/admin/AdminPanel'
 import Jobs from '../views/jobs/Jobs'
 import EditJob from '../views/jobs/EditJob'
 import ShowJob from '../views/jobs/ShowJob'
@@ -12,6 +13,11 @@ const routes = [
     {
         path: '/',
         redirect: '/jobs'
+    },
+    {
+        path: '/admin-panel',
+        name: 'Admin panel',
+        component: AdminPanel
     },
     {
         path: '/jobs',
