@@ -6,11 +6,12 @@
       <v-textarea v-model="job.description" label="Description"></v-textarea>
     </v-card-text>
     <v-card-actions class="pa-4">
+      <v-btn @click="$emit('closeDialog')" depressed text>cancel</v-btn>
       <v-spacer></v-spacer>
       <v-btn @click="submitJob" depressed class="blue white--text"
         >create</v-btn
-      ></v-card-actions
-    >
+      >
+    </v-card-actions>
   </v-card>
 </template>
 
