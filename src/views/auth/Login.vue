@@ -1,11 +1,9 @@
 <template>
   <div class="pa-4">
-    <h1>Login</h1>
-
     <v-row justify="center">
       <v-col cols="12" md="6">
         <v-card>
-          <v-card-title>Logins</v-card-title>
+          <v-card-title>Login</v-card-title>
           <v-card-text>
             <v-text-field v-model="email" label="Email" required>
             </v-text-field>

@@ -1,7 +1,5 @@
 <template>
   <div class="pa-4">
-    <h1>Register</h1>
-
     <v-row justify="center">
       <v-col cols="12" md="6">
         <v-card>

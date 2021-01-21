@@ -17,37 +17,7 @@
               <v-icon left>mdi-chevron-down</v-icon>menu
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item
-              v-for="(link, index) in links"
-              :key="index"
-              link
-              :to="link.route"
-            >
-              <v-list-item-title>
-                <v-icon left>{{ link.icon }}</v-icon>
-                {{ link.text }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item to="/admin-panel">
-              <v-list-item-title>
-                <v-icon left>mdi-account-key</v-icon>
-                Admin panel
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="!user" to="/login">
-              <v-list-item-title>
-                <v-icon left>mdi-account</v-icon>
-                Login
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="!user" to="/register">
-              <v-list-item-title>
-                <v-icon left>mdi-account-circle</v-icon>
-                Register
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
+          <links />
         </v-menu>
       </div>
 
@@ -58,7 +28,7 @@
       >
 
       <!-- Logout -->
-      <div>
+      <div v-if="user">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn @click="logout" icon v-bind="attrs" v-on="on">
@@ -79,49 +49,20 @@
       </v-row>
 
       <!-- List of actions -->
-      <v-list>
-        <v-list-item
-          v-for="(link, index) in links"
-          :key="index"
-          link
-          :to="link.route"
-        >
-          <v-list-item-title>
-            <v-icon left>{{ link.icon }}</v-icon>
-            {{ link.text }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item to="/admin-panel">
-          <v-list-item-title>
-            <v-icon left>mdi-account-key</v-icon>
-            Admin panel
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item v-if="!user" to="/login">
-          <v-list-item-title>
-            <v-icon left>mdi-account</v-icon>
-            Login
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item v-if="!user" to="/register">
-          <v-list-item-title>
-            <v-icon left>mdi-account-circle</v-icon>
-            Register
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+      <links />
     </v-navigation-drawer>
   </nav>
 </template>
 
 <script>
 import Api from "../Api/Api";
+import Links from "./Links.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  components: { Links },
   data: () => ({
     drawer: false,
-    links: [{ icon: "mdi-office-building", text: "Jobs", route: "/jobs" }],
   }),
   computed: {
     ...mapGetters(["user"]),
