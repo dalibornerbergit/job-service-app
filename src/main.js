@@ -3,6 +3,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from './router'
 import store from './store'
+import moment from "moment";
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("api_token");
@@ -20,6 +21,7 @@ router.beforeEach((to, from, next) => {
 
 
 Vue.config.productionTip = false
+Vue.prototype.moment = moment
 
 new Vue({
   vuetify,

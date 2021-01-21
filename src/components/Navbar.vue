@@ -23,6 +23,8 @@
 
       <span
         v-if="user"
+        style="cursor: pointer"
+        @click="$router.push({ name: 'Profile', params: { id: user.id } })"
         class="blue-grey darken-4 white--text d-none d-sm-flex py-1 px-2 rounded"
         >{{ user.email }}</span
       >

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AdminPanel from '../views/admin/AdminPanel'
+import Profile from '../views/profile/Profile'
 import Jobs from '../views/jobs/Jobs'
 import EditJob from '../views/jobs/EditJob'
 import ShowJob from '../views/jobs/ShowJob'
@@ -18,6 +19,11 @@ const routes = [
         path: '/admin-panel',
         name: 'Admin panel',
         component: AdminPanel
+    },
+    {
+        path: '/profile/:id',
+        name: 'Profile',
+        component: Profile
     },
     {
         path: '/jobs',
