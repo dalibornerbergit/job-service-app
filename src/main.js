@@ -4,6 +4,21 @@ import vuetify from './plugins/vuetify';
 import router from './router'
 import store from './store'
 
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("api_token");
+
+  if (!token && (to.name == 'Login' || to.name == 'Register')) {
+    next()
+  } else if (!token) {
+    next({ name: 'Login' });
+  } else if (token && (to.name == 'Login' || to.name == 'Register')) {
+    next({ name: 'Jobs' })
+  } else {
+    next()
+  }
+})
+
+
 Vue.config.productionTip = false
 
 new Vue({

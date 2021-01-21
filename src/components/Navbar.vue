@@ -133,7 +133,7 @@ export default {
           console.log(response);
           localStorage.removeItem("api_token");
           this.$store.dispatch("user", null);
-          window.location.href = "/";
+          window.location.href = "/login";
         })
         .catch((err) => {
           console.log(err);
