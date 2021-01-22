@@ -72,8 +72,8 @@ export default {
         password: this.password,
         password_confirmation: this.password_confirmation,
       })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
+          window.location.href = "/login";
         })
         .catch((err) => {
           console.log(err);

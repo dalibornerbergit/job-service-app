@@ -18,9 +18,11 @@ const actions = {
         commit('setJobs', response.data)
     },
     async addJob({ commit }, job) {
-        const response = await Api.post('/jobs', job)
+        await Api.post('/jobs', job)
 
-        commit('newJob', response.data.data)
+        const response = await Api.get(`/jobs?include=recruiter`)
+
+        commit('setJobs', response.data)
     },
     async updateJob({ commit }, job) {
         const response = await Api.put(`jobs/${job.id}`, job)

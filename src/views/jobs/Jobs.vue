@@ -8,13 +8,43 @@
 
     <v-row>
       <v-col v-for="job in allJobs.data" :key="job.id" cols="12" sm="6" md="4">
-        <v-card flat>
+        <v-card>
           <v-card-title>{{ job.title }}</v-card-title>
-          <v-card-text>{{ job.description }}</v-card-text>
+          <v-card-text>
+            <p>{{ job.description.slice(0, 40) }}...</p>
+
+            <div class="text-right">
+              <div>Crated by:</div>
+              <div>
+                Email: <b>{{ job.recruiter.email }}</b>
+              </div>
+              <div>
+                Name:
+                <b
+                  style="cursor: pointer"
+                  @click="
+                    $router.push({
+                      name: 'Profile',
+                      params: { id: job.recruiter_id },
+                    })
+                  "
+                  >{{ job.recruiter.first_name }}
+                  {{ job.recruiter.last_name }}</b
+                >
+              </div>
+            </div>
+          </v-card-text>
           <v-card-actions class="pa-4">
-            <v-btn @click="deleteJob(job.id)" depressed>delete</v-btn>
+            <v-btn
+              v-if="job.recruiter.id === user.id"
+              @click="deleteJob(job.id)"
+              text
+              depressed
+              >delete</v-btn
+            >
             <v-spacer></v-spacer>
             <v-btn
+              v-if="job.recruiter.id === user.id"
               @click="$router.push({ name: 'EditJob', params: { id: job.id } })"
               depressed
               class="orange"
@@ -58,7 +88,7 @@ export default {
     ...mapActions(["fetchJobs", "deleteJob"]),
   },
   computed: {
-    ...mapGetters(["allJobs"]),
+    ...mapGetters(["user", "allJobs"]),
   },
   created() {
     this.fetchJobs();

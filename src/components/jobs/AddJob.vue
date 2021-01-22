@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     job: {
@@ -31,6 +31,8 @@ export default {
   methods: {
     ...mapActions(["addJob"]),
     submitJob() {
+      this.job.recruiter_id = this.user.id;
+
       this.addJob(this.job)
         .then(() => {
           this.$emit("jobCreated");
@@ -39,6 +41,9 @@ export default {
           this.$emit("error");
         });
     },
+  },
+  computed: {
+    ...mapGetters(["user"]),
   },
 };
 </script>

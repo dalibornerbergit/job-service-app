@@ -64,7 +64,7 @@ import { mapGetters } from "vuex";
 export default {
   components: { Links },
   data: () => ({
-    drawer: false,
+    drawer: true,
   }),
   computed: {
     ...mapGetters(["user"]),
