@@ -7,19 +7,17 @@
     </div>
 
     <v-row>
-      <v-col v-for="job in allJobs.data" :key="job.id" cols="12" sm="6" md="4">
+      <v-col v-for="job in allJobs.data" :key="job.id" cols="12" sm="6" md="3">
         <v-card>
-          <v-card-title>{{ job.title }}</v-card-title>
-          <v-card-text>
+          <v-card-title class="blue-grey darken-4 white--text">{{
+            job.title
+          }}</v-card-title>
+          <v-card-text class="pa-4">
             <p>{{ job.description.slice(0, 40) }}...</p>
 
             <div class="text-right">
-              <div>Crated by:</div>
               <div>
-                Email: <b>{{ job.recruiter.email }}</b>
-              </div>
-              <div>
-                Name:
+                Crated by:
                 <b
                   style="cursor: pointer"
                   @click="
@@ -39,6 +37,7 @@
               v-if="job.recruiter.id === user.id"
               @click="deleteJob(job.id)"
               text
+              small
               depressed
               >delete</v-btn
             >
@@ -47,6 +46,7 @@
               v-if="job.recruiter.id === user.id"
               @click="$router.push({ name: 'EditJob', params: { id: job.id } })"
               depressed
+              small
               class="orange"
               >edit</v-btn
             >
@@ -54,6 +54,7 @@
             <v-btn
               @click="$router.push({ name: 'ShowJob', params: { id: job.id } })"
               depressed
+              small
               class="blue white--text"
               >details</v-btn
             ></v-card-actions

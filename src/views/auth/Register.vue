@@ -12,6 +12,12 @@
               </v-text-field>
               <v-text-field v-model="email" label="Email" type="email" required>
               </v-text-field>
+              <v-checkbox
+                v-model="is_recruiter"
+                label="I'm a recruiter"
+                color="blue"
+                value="1"
+              ></v-checkbox>
               <v-text-field
                 v-model="password"
                 label="Password"
@@ -52,6 +58,7 @@ export default {
     first_name: "",
     last_name: "",
     email: "",
+    is_recruiter: false,
     password: "",
     password_confirmation: "",
   }),
@@ -63,12 +70,13 @@ export default {
   },
   methods: {
     register() {
-      console.log("Register");
+      if (!this.is_recruiter) this.is_recruiter = false;
 
       Api.post("/register", {
         first_name: this.first_name,
         last_name: this.last_name,
         email: this.email,
+        is_recruiter: this.is_recruiter,
         password: this.password,
         password_confirmation: this.password_confirmation,
       })
