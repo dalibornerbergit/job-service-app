@@ -7,7 +7,13 @@
     </div>
 
     <v-row>
-      <v-col v-for="job in allJobs.data" :key="job.id" cols="12" sm="6" md="3">
+      <v-col
+        v-for="job in allJobs.data.filter((job) => !job.in_progress)"
+        :key="job.id"
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <v-card>
           <v-card-title class="blue-grey darken-4 white--text"
             >{{ job.title }} {{ job.id }}</v-card-title

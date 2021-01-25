@@ -8,11 +8,17 @@
     <div v-if="!(user.id === job.recruiter_id) && applied" class="text-center">
       <h4 class="green--text">Prijavili ste se za ovaj posao</h4>
     </div>
+    <div class="text-center">
+      <h4 class="green--text">
+        {{ employee.first_name }} {{ employee.last_name }} -
+        {{ employee.email }} was chosen to complete this job.
+      </h4>
+    </div>
     <h1>{{ job.title }}</h1>
     <p>{{ job.description }}</p>
     <v-btn @click="$router.back()" text>back</v-btn>
 
-    <div v-if="user.id === job.recruiter_id">
+    <div v-if="user.id === job.recruiter_id && !job.in_progress">
       <h2>Applications</h2>
 
       <v-row>
@@ -51,7 +57,12 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn depressed class="blue white--text">Accept</v-btn>
+              <v-btn
+                @click="acceptEmployee(application.id)"
+                depressed
+                class="blue white--text"
+                >Accept</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-col>
@@ -70,6 +81,7 @@ export default {
       title: "",
       description: "",
     },
+    employee: {},
     applications: [],
   }),
   created() {
@@ -99,6 +111,16 @@ export default {
       Api.get(`/jobs/${id}`)
         .then((response) => {
           this.job = response.data.data;
+
+          if (response.data.data.in_progress) {
+            Api.get(`/users/${response.data.data.employee_id}`)
+              .then((response) => {
+                this.employee = response.data.data;
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -122,6 +144,20 @@ export default {
         .then((response) => {
           console.log(response);
           window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    acceptEmployee(employeei_id) {
+      let job = this.job;
+
+      job.employee_id = employeei_id;
+      job.in_progress = true;
+
+      Api.put(`/jobs/${job.id}`, job)
+        .then((response) => {
+          console.log(response);
         })
         .catch((err) => {
           console.log(err);
