@@ -1,13 +1,62 @@
 <template>
   <div class="pa-4">
-    <div class="text-center">
+    <div v-if="!(user.id === job.recruiter_id) && !applied" class="text-center">
       <v-btn @click="applyForJob()" depressed class="green white--text"
         >Apply</v-btn
       >
     </div>
+    <div v-if="!(user.id === job.recruiter_id) && applied" class="text-center">
+      <h4 class="green--text">Prijavili ste se za ovaj posao</h4>
+    </div>
     <h1>{{ job.title }}</h1>
     <p>{{ job.description }}</p>
     <v-btn @click="$router.back()" text>back</v-btn>
+
+    <div v-if="user.id === job.recruiter_id">
+      <h2>Applications</h2>
+
+      <v-row>
+        <v-col
+          v-for="application in applications"
+          :key="application.id"
+          cols="12"
+          sm="6"
+          md="3"
+        >
+          <v-card>
+            <v-card-title class="blue-grey darken-4"
+              >{{ application.first_name }}
+              {{ application.last_name }}</v-card-title
+            >
+            <v-card-text class="pa-4">
+              <div>
+                Email:
+                <b
+                  style="cursor: pointer"
+                  @click="
+                    $router.push({
+                      name: 'Profile',
+                      params: { id: application.id },
+                    })
+                  "
+                  >{{ application.email }}</b
+                >
+              </div>
+              <div>
+                Applied:
+                <b>{{
+                  moment(application.created_at).format("DD.MM.YYYY.")
+                }}</b>
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn depressed class="blue white--text">Accept</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -21,12 +70,27 @@ export default {
       title: "",
       description: "",
     },
+    applications: [],
   }),
   created() {
     this.fetchJob();
+    this.fetchApplications();
   },
   computed: {
     ...mapGetters(["user"]),
+    applied: function () {
+      let applied = false;
+
+      console.log("Checking");
+      this.applications.forEach((application) => {
+        if (application.id === this.user.id) {
+          console.log("True");
+          applied = true;
+        }
+      });
+      if (applied) return true;
+      else return false;
+    },
   },
   methods: {
     fetchJob() {
@@ -40,12 +104,24 @@ export default {
           console.log(err);
         });
     },
+    fetchApplications() {
+      let id = this.$route.params.id;
+
+      Api.get(`/jobs/${id}/applications`)
+        .then((response) => {
+          this.applications = response.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     applyForJob() {
       Api.post(`/jobs/${this.job.id}/applications/attach`, {
         resources: [this.user.id],
       })
         .then((response) => {
           console.log(response);
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);
