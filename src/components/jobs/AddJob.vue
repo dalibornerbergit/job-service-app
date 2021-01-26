@@ -17,6 +17,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+// import Api from "../../Api/Api";
+
 export default {
   data: () => ({
     job: {
@@ -28,22 +30,24 @@ export default {
       finished: false,
     },
   }),
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
     ...mapActions(["addJob"]),
     submitJob() {
       this.job.recruiter_id = this.user.id;
 
       this.addJob(this.job)
-        .then(() => {
+        .then((response) => {
+          console.log(response);
+
           this.$emit("jobCreated");
         })
         .catch(() => {
           this.$emit("error");
         });
     },
-  },
-  computed: {
-    ...mapGetters(["user"]),
   },
 };
 </script>

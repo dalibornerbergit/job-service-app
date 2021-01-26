@@ -8,18 +8,26 @@
 
     <v-row>
       <v-col
-        v-for="job in allJobs.data.filter((job) => !job.in_progress)"
+        v-for="job in allJobs.data.filter(
+          (job) => !job.in_progress && !job.finished
+        )"
         :key="job.id"
         cols="12"
         sm="6"
         md="3"
       >
         <v-card>
-          <v-card-title class="blue-grey darken-4 white--text"
-            >{{ job.title }} {{ job.id }}</v-card-title
-          >
+          <v-card-title class="blue-grey darken-4 white--text">{{
+            job.title
+          }}</v-card-title>
           <v-card-text class="pa-4">
             <p>{{ job.description.slice(0, 40) }}...</p>
+            <p>
+              Skills:
+              <b v-for="skill in job.skills" :key="skill.id"
+                >{{ skill.name }} /</b
+              >
+            </p>
 
             <div class="text-right">
               <div>

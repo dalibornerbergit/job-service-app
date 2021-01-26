@@ -8,17 +8,31 @@
     <div v-if="!(user.id === job.recruiter_id) && applied" class="text-center">
       <h4 class="green--text">Prijavili ste se za ovaj posao</h4>
     </div>
-    <div class="text-center">
+    <div v-if="job.in_progress" class="text-center">
       <h4 class="green--text">
         {{ employee.first_name }} {{ employee.last_name }} -
         {{ employee.email }} was chosen to complete this job.
       </h4>
+      <v-btn @click="finishJob()" depressed class="green white--text ma-4"
+        >Finish job</v-btn
+      >
     </div>
-    <h1>{{ job.title }}</h1>
-    <p>{{ job.description }}</p>
-    <v-btn @click="$router.back()" text>back</v-btn>
+    <div v-if="job.finished" class="text-center">
+      <h4 class="green--text">
+        {{ employee.first_name }} {{ employee.last_name }} -
+        {{ employee.email }} completed this job.
+      </h4>
+    </div>
 
-    <div v-if="user.id === job.recruiter_id && !job.in_progress">
+    <div class="py-4">
+      <h1>{{ job.title }}</h1>
+      <p>{{ job.description }}</p>
+      <v-btn @click="$router.back()" text>back</v-btn>
+    </div>
+
+    <div
+      v-if="user.id === job.recruiter_id && !job.in_progress && !job.finished"
+    >
       <h2>Applications</h2>
 
       <v-row>
@@ -112,7 +126,7 @@ export default {
         .then((response) => {
           this.job = response.data.data;
 
-          if (response.data.data.in_progress) {
+          if (response.data.data.in_progress || response.data.data.finished) {
             Api.get(`/users/${response.data.data.employee_id}`)
               .then((response) => {
                 this.employee = response.data.data;
@@ -141,8 +155,7 @@ export default {
       Api.post(`/jobs/${this.job.id}/applications/attach`, {
         resources: [this.user.id],
       })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           window.location.reload();
         })
         .catch((err) => {
@@ -154,6 +167,20 @@ export default {
 
       job.employee_id = employeei_id;
       job.in_progress = true;
+
+      Api.put(`/jobs/${job.id}`, job)
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    finishJob() {
+      let job = this.job;
+
+      job.finished = true;
+      job.in_progress = false;
 
       Api.put(`/jobs/${job.id}`, job)
         .then((response) => {
