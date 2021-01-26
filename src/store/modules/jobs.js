@@ -9,9 +9,9 @@ const getters = {
 }
 
 const actions = {
-    async fetchJobs({ commit }) {
+    async fetchJobs({ commit }, page) {
 
-        const response = await Api.get(`/jobs?include=recruiter,skills`)
+        const response = await Api.get(`/jobs?page=${page}&include=recruiter,skills`)
 
         console.log(response)
 

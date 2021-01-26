@@ -7,6 +7,18 @@
     </div>
 
     <v-row>
+      <v-col cols="12" lg="2"
+        ><v-select
+          :items="allSkills.data"
+          label="Filter by skill"
+          return-object
+          item-text="name"
+          v-model="selectedSkill"
+        ></v-select
+      ></v-col>
+    </v-row>
+
+    <v-row>
       <v-col
         v-for="job in allJobs.data.filter(
           (job) => !job.in_progress && !job.finished
@@ -40,9 +52,10 @@
                       params: { id: job.recruiter_id },
                     })
                   "
-                  >{{ job.recruiter.first_name }}
-                  {{ job.recruiter.last_name }}</b
                 >
+                  {{ job.recruiter.first_name }}
+                  {{ job.recruiter.last_name }}
+                </b>
               </div>
             </div>
           </v-card-text>
@@ -76,6 +89,12 @@
         </v-card>
       </v-col>
     </v-row>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="allJobs.meta.last_page"
+      ></v-pagination>
+    </div>
 
     <v-dialog v-model="dialog" width="600">
       <add-job
@@ -98,12 +117,19 @@ export default {
   data: () => ({
     job: {},
     dialog: false,
+    selectedSkill: null,
+    page: 1,
   }),
+  watch: {
+    page: function () {
+      this.fetchJobs(this.page);
+    },
+  },
   methods: {
-    ...mapActions(["fetchJobs", "deleteJob"]),
+    ...mapActions(["fetchJobs", "fetchSkills", "deleteJob"]),
   },
   computed: {
-    ...mapGetters(["user", "allJobs"]),
+    ...mapGetters(["user", "allJobs", "allSkills"]),
   },
   created() {
     this.fetchJobs();
