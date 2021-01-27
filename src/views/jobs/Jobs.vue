@@ -7,15 +7,18 @@
     </div>
 
     <v-row>
-      <v-col cols="12" lg="2"
+      <v-col cols="12" sm="6" md="3" lg="2"
         ><v-select
           :items="allSkills.data"
           label="Filter by skill"
-          return-object
+          item-value="id"
           item-text="name"
-          v-model="selectedSkill"
-        ></v-select
-      ></v-col>
+          v-model="selectedSkillId"
+        ></v-select>
+        <v-btn depressed class="blue white--text" @click="removeFilters()"
+          >Remove filters</v-btn
+        >
+      </v-col>
     </v-row>
 
     <v-row>
@@ -108,6 +111,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import Api from "../../Api/Api";
 import AddJob from "../../components/jobs/AddJob.vue";
 
 export default {
@@ -117,22 +121,40 @@ export default {
   data: () => ({
     job: {},
     dialog: false,
-    selectedSkill: null,
+    selectedSkillId: null,
     page: 1,
   }),
   watch: {
     page: function () {
       this.fetchJobs(this.page);
     },
+    selectedSkillId: function () {
+      if (this.selectedSkillId) {
+        Api.get(`/skills/${this.selectedSkillId}/jobs?include=recruiter,skills`)
+          .then((response) => {
+            console.log(response);
+            this.allJobs.data = response.data.data;
+            this.allJobs.meta = response.data.meta;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
   },
   methods: {
     ...mapActions(["fetchJobs", "fetchSkills", "deleteJob"]),
+    removeFilters() {
+      this.selectedSkillId = null;
+      this.fetchJobs(this.page);
+    },
   },
   computed: {
     ...mapGetters(["user", "allJobs", "allSkills"]),
   },
   created() {
     this.fetchJobs();
+    this.fetchSkills();
   },
 };
 </script>

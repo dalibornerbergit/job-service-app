@@ -46,7 +46,7 @@
     <v-navigation-drawer app v-model="drawer" class="blue-grey darken-4">
       <v-row class="mb-4">
         <v-col class="text-center">
-          <span class="overline white--text">job service</span>
+          <span class="overline">job service</span>
         </v-col>
       </v-row>
 
