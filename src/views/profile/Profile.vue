@@ -44,6 +44,14 @@
       </v-card-text>
       <v-card-actions class="pa-4">
         <v-btn depressed text @click="$router.back()">back</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+          v-if="user.id !== userProfile.id"
+          @click="dialog = true"
+          depressed
+          class="green white--text"
+          >Leave review</v-btn
+        >
       </v-card-actions>
     </v-card>
 
@@ -95,14 +103,57 @@
         </v-col>
       </v-row>
     </div>
+
+    <div
+      class="my-4"
+      v-if="userProfile.user_reviews && userProfile.user_reviews.length > 0"
+    >
+      <h2>Reviews</h2>
+
+      <v-row>
+        <v-col
+          cols="12"
+          md="6"
+          lg="3"
+          v-for="review in userProfile.user_reviews"
+          :key="review.id"
+        >
+          <v-card>
+            <v-card-title>{{
+              moment(review.created_at).format("DD.MM.YYYY.")
+            }}</v-card-title>
+            <v-card-text>
+              <div>
+                Description: <b>{{ review.description }}</b>
+              </div>
+              <div>
+                Rating: <b>{{ review.rating }}</b>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+
+    <v-dialog max-width="600px" v-model="dialog">
+      <AddReview
+        @closeDialog="closeDialog()"
+        :employee_id="userProfile.id"
+        :recruiter_id="user.id"
+      />
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Api from "../../Api/Api";
+import AddReview from "../../components/reviews/AddReview";
 
 export default {
+  components: {
+    AddReview,
+  },
   data: () => ({
     userProfile: {
       skills: [],
@@ -110,6 +161,7 @@ export default {
     selectedSkills: [],
     jobs: [],
     showAddSkills: false,
+    dialog: false,
   }),
   created() {
     this.fetchUser();
@@ -124,10 +176,8 @@ export default {
     fetchUser() {
       let id = this.$route.params.id;
 
-      Api.get(`/users/${id}?include=skills`)
+      Api.get(`/users/${id}?include=skills,userReviews`)
         .then((response) => {
-          console.log(response);
-
           this.userProfile = response.data.data;
           this.selectedSkills = response.data.data.skills;
         })
@@ -140,8 +190,6 @@ export default {
 
       Api.get(`/recruiters/${id}/recruiterJobs`)
         .then((response) => {
-          console.log(response);
-
           this.jobs = response.data.data;
         })
         .catch((err) => {
@@ -167,6 +215,12 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    closeDialog() {
+      this.dialog = false;
+      this.fetchUser();
+      this.fetchSkills();
+      this.fetchUsersJobs();
     },
   },
 };

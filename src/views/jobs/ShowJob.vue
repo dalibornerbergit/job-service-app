@@ -18,9 +18,20 @@
       >
     </div>
     <div v-if="job.finished" class="text-center">
-      <h4 class="green--text">
+      <h4 class="mb-4 green--text">
         {{ employee.first_name }} {{ employee.last_name }} -
-        {{ employee.email }} completed this job.
+        <span
+          class="green--text"
+          style="cursor: pointer"
+          @click="
+            $router.push({
+              name: 'Profile',
+              params: { id: employee.id },
+            })
+          "
+          >{{ employee.email }}</span
+        >
+        completed this job.
       </h4>
     </div>
 
@@ -34,7 +45,9 @@
       v-if="user.id === job.recruiter_id && !job.in_progress && !job.finished"
     >
       <h2>Applications</h2>
-      <h4 class="orange--text" v-if="applications.length == 0">No applications yet</h4>
+      <h4 class="orange--text" v-if="applications.length == 0">
+        No applications yet
+      </h4>
 
       <v-row>
         <v-col
@@ -98,6 +111,7 @@ export default {
     },
     employee: {},
     applications: [],
+    dialog: false,
   }),
   created() {
     this.fetchJob();
