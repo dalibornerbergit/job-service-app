@@ -39,9 +39,7 @@ export default {
       this.job.recruiter_id = this.user.id;
 
       this.addJob(this.job)
-        .then((response) => {
-          console.log(response);
-
+        .then(() => {
           this.$emit("jobCreated");
         })
         .catch(() => {

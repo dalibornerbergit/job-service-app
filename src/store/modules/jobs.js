@@ -13,8 +13,6 @@ const actions = {
 
         const response = await Api.get(`/jobs?page=${page}&include=recruiter,skills`)
 
-        console.log(response)
-
         commit('setJobs', response.data)
     },
     async addJob({ commit }, job) {

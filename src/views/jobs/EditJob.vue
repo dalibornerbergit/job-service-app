@@ -1,5 +1,8 @@
 <template>
   <div class="pa-4">
+    <div v-if="success" class="text-center">
+      <h4 class="green--text">Skills added</h4>
+    </div>
     <v-card class="mx-auto" max-width="600px">
       <v-card-title>Edit job</v-card-title>
       <v-card-text>
@@ -40,6 +43,7 @@ export default {
       description: "",
     },
     selectedSkills: [],
+    success: false,
   }),
   created() {
     this.fetchJob();
@@ -55,6 +59,7 @@ export default {
         .then((response) => {
           console.log(response);
           this.job = response.data.data;
+          this.selectedSkills = response.data.data.skills;
         })
         .catch((err) => {
           console.log(err);
@@ -74,7 +79,11 @@ export default {
         resources: this.selectedSkills,
       })
         .then(() => {
-          window.location.reload();
+          this.success = true;
+          this.fetchJob();
+          setTimeout(() => {
+            this.success = false;
+          }, 3000);
         })
         .catch((err) => {
           console.log(err);

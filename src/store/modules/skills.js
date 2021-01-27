@@ -13,8 +13,6 @@ const actions = {
 
         const response = await Api.get(`/skills`)
 
-        console.log(response)
-
         commit('setSkills', response.data)
     },
     async addSkill({ commit }, skill) {

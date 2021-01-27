@@ -6,7 +6,7 @@
         Jobs
       </v-list-item-title>
     </v-list-item>
-    <v-list-item v-if="user" to="/admin-panel">
+    <v-list-item v-if="user && user.id === 3" to="/admin-panel">
       <v-list-item-title>
         <v-icon left>mdi-account-key</v-icon>
         Admin panel

@@ -34,6 +34,7 @@
       v-if="user.id === job.recruiter_id && !job.in_progress && !job.finished"
     >
       <h2>Applications</h2>
+      <h4 class="orange--text" v-if="applications.length == 0">No applications yet</h4>
 
       <v-row>
         <v-col

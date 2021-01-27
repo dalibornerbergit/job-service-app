@@ -31,20 +31,23 @@
         sm="6"
         md="3"
       >
-        <v-card>
+        <v-card v-if="job.recruiter">
           <v-card-title class="blue-grey darken-4 white--text">{{
             job.title
           }}</v-card-title>
           <v-card-text class="pa-4">
-            <p>{{ job.description.slice(0, 40) }}...</p>
-            <p>
+            <p>{{ job.description.slice(0, 40) }}</p>
+            <p v-if="job.skills && job.skills.length == 0">
+              <b>No skills added yet</b>
+            </p>
+            <p v-else>
               Skills:
               <b v-for="skill in job.skills" :key="skill.id"
                 >{{ skill.name }} /</b
               >
             </p>
 
-            <div class="text-right">
+            <div v-if="job.recruiter" class="text-right">
               <div>
                 Crated by:
                 <b
@@ -64,7 +67,7 @@
           </v-card-text>
           <v-card-actions class="pa-4">
             <v-btn
-              v-if="job.recruiter.id === user.id"
+              v-if="job.recruiter.id === user.id || user.id === 3"
               @click="deleteJob(job.id)"
               text
               small
@@ -102,7 +105,7 @@
     <v-dialog v-model="dialog" width="600">
       <add-job
         :job="job"
-        @jobCreated="dialog = false"
+        @jobCreated="jobCreated()"
         @closeDialog="dialog = false"
       />
     </v-dialog>
@@ -119,7 +122,10 @@ export default {
     AddJob,
   },
   data: () => ({
-    job: {},
+    job: {
+      recruiter: {},
+      skills: ["No skills added"],
+    },
     dialog: false,
     selectedSkillId: null,
     page: 1,
@@ -132,7 +138,6 @@ export default {
       if (this.selectedSkillId) {
         Api.get(`/skills/${this.selectedSkillId}/jobs?include=recruiter,skills`)
           .then((response) => {
-            console.log(response);
             this.allJobs.data = response.data.data;
             this.allJobs.meta = response.data.meta;
           })
@@ -148,12 +153,16 @@ export default {
       this.selectedSkillId = null;
       this.fetchJobs(this.page);
     },
+    jobCreated() {
+      this.dialog = false;
+      this.fetchJobs(this.page);
+    },
   },
   computed: {
     ...mapGetters(["user", "allJobs", "allSkills"]),
   },
   created() {
-    this.fetchJobs();
+    this.fetchJobs(this.page);
     this.fetchSkills();
   },
 };
