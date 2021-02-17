@@ -1,5 +1,10 @@
 <template>
   <div class="pa-4">
+    <div>
+      <v-alert v-model="errorAlert" border="top" color="red lighten-2" dark>
+        {{ errorMessage }}
+      </v-alert>
+    </div>
     <v-row justify="center">
       <v-col cols="12" md="6">
         <v-card>
@@ -34,6 +39,8 @@ export default {
   data: () => ({
     email: "",
     password: "",
+    errorMessage: "",
+    errorAlert: false,
   }),
   methods: {
     login() {
@@ -47,8 +54,9 @@ export default {
           this.$store.dispatch("user", response.data.data);
           window.location.href = "/";
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          this.errorAlert = true;
+          this.errorMessage = "Invalid input";
         });
     },
   },

@@ -86,7 +86,7 @@ export default {
         })
         .catch(() => {
           this.errorAlert = true;
-          this.errorMessage = "Email is taken"
+          this.errorMessage = "Invalid input"
           setTimeout(() => {
             this.errorAlert = false
           }, 3000);
